@@ -18,14 +18,13 @@ contract PrivacyScript is Script {
             id := chainid()
         }
 
-        if (id == 80002) {
-            privacyContract = Privacy(payable(0x3f754D1a4278A32d91BF822027761E3Bdd75b119));
+        if (id== 80002) {
+            privacyContract = Privacy(payable(0x960072BAB02BE3736F3bCE60604966b73c70Cb3C));
         } else {
             vm.startBroadcast(deployerPrivateKey);
 
             // Deploy a new contract
             privacyContract = new Privacy([bytes32(0), bytes32(0), bytes32(0)]);
-            vm.deal(address(privacyContract), 1 wei);
             vm.stopBroadcast();
         }
 
