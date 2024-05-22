@@ -8,11 +8,21 @@ import "forge-std/console.sol";
 contract PrivacyScript is Script {
 
     Privacy private privacyContract;
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+
 
     function run() external {
         console.log("Solving Privacy Contract...");
 
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        uint256 id;
+        assembly {
+            id := chainid()
+        }
+
+         if (id == 80002) {
+            privacyContract = Privacy(payable(0x3f754D1a4278A32d91BF822027761E3Bdd75b119));
+        } else {
+
 
         vm.startBroadcast(deployerPrivateKey);
 
@@ -20,6 +30,8 @@ contract PrivacyScript is Script {
         privacyContract = new Privacy([bytes32(0), bytes32(0), bytes32(0)]);
         vm.deal(address(privacyContract), 1 wei);
         vm.stopBroadcast();
+
+        }
 
         console.log("Privacy Contract Address: ", address(privacyContract));
 
